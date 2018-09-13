@@ -1,42 +1,40 @@
-$(document).ready(function () {
 var wins = 0;
 var losses = 0;
-var wordBank = ["red", "yellow", "blue", "grey"];
-var guesses = 10;
-var computerChoice = wordBank[Math.floor(Math.random() * wordBank.length)];
-var strLength = computerChoice.length;
-var array = [];
-var wordArray = computerChoice.split("");
-var userChoice = "";
-console.log(wordArray[0]);
-for(var i= 0; i < computerChoice.length; i++){
+var maxGuesses = 9;
+var validGuesses = [ 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z' ];
+var emptyAlert = "ready to play";
+var game = new Hangman();
 
-    array.push("_");
-    console.log(array);
-}
+document.onkeyup = function (event) {
+    var userGuess = event.key;
 
-
-$("#word-box").append(array.join(" "));
-
-document.onkeyup = function(_event){
-    userChoice = _event.key;
-    for(var i = 0; i < wordArray.length; i++ ){
-        var letters = wordArray[i];
-        if(userChoice === letters){
-            console.log(wordArray);
-            console.log(wordArray.indexOf(userChoice));
-            array[wordArray.indexOf(userChoice)] = letters;
-            console.log(array);
-            $("#word-box").text(array);
+    if(!game.gameover) {
+        if(validGuesses.includes(userGuess) && !game.guessedLetters.includes(userGuess)) {
+            game.checkGuess(userGuess);
         }
+    } else {
+        game = new Hangman();
+        game.updatePageData();
     }
 }
 
+function Hangman() {
+    this.wordList = [
+        "Magenta"
+    ]
 
-function updateGuessesLeft() {
-    // Here we are grabbing the HTML element and setting it equal to the guessesLeft. (i.e. guessesLeft will get displayed in HTML)
-    $("#guessLeft").innerHTML = "Guesses left: " + guessesLeft;
-};
+    this.word = this.wordList =[Math.floor(Math.random() * this.wordList.length)];
+    this.guessedLetters = [];
+    this.wrongGuess = 0;
+    this.visibleLetters = [];
+    this.gameOver = false;
+    this.alertLines = emptyAlert;
+    for (var i = 0; i < this.word.length; i++) {
+        this.visibleLetters[i] = (false);
+    };
+}
 
-
-});
+Hangman.prototype.checkGuess = function(char) {
+    this.guessedLetters.push(char);
+    alert(this.guessedLetters);
+}   
